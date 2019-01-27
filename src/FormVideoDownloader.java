@@ -1,15 +1,8 @@
-import org.apache.commons.lang3.StringUtils;
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,7 +77,7 @@ public class FormVideoDownloader {
                         + "%(title)s.%(ext)s";
 
                 lblDownloadLocation.setText(file.toString());
-                System.out.println("Save Directory: " + file);
+                System.out.println("Save Directory: " + saveDirectory);
             }
         });
 
@@ -130,6 +123,12 @@ public class FormVideoDownloader {
                     commandStringBuilder.append("--audio-format ").append(audioFormat).append(" ");
                 }
 
+                if(!saveDirectory.isEmpty())
+                {
+                    commandStringBuilder.append("-o \"").append(saveDirectory).append("\" ");
+                    commandStringBuilder.append("--ignore-config ");
+                }
+
                 // Final value in the command should be the url
                 if (isUrl(txtUrl.getText()))
                 {
@@ -166,10 +165,7 @@ public class FormVideoDownloader {
 
         if (matcher_pass_1.find())
         {
-//            System.out.println(matcher_pass_1.group());
-//            System.out.println("MATCH!");
             extractedStringFromPass1 = matcher_pass_1.group(0);
-//            return matcher_pass_1.group(0);
         }
         else
         {
@@ -210,11 +206,6 @@ public class FormVideoDownloader {
                 {
                     System.out.println("Download Progress: " + findDownloadProgress(outputFromCommand));
                     lblDownloadProgress.setText(findDownloadProgress(outputFromCommand) + "%");
-
-                    if (StringUtils.isNumeric(findDownloadProgress(outputFromCommand)))
-                    {
-                        //
-                    }
                 }
                 if (outputFromCommand.contains("[download] 100%"))
                 {

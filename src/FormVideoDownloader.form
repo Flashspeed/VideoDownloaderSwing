@@ -125,7 +125,7 @@
                   <font size="24"/>
                   <opaque value="false"/>
                   <requestFocusEnabled value="false"/>
-                  <text value="100%"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>
