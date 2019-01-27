@@ -32,6 +32,7 @@ public class FormVideoDownloader {
         {
             cmbAudioFormat.setEnabled(false);
         }
+        cmbAudioFormat.setSelectedIndex(0);
         isVideoDownloadSelected = true;
         //########################################################################
         operatingSystem = System.getProperty("os.name").toLowerCase();
@@ -58,6 +59,7 @@ public class FormVideoDownloader {
             else
             {
                 cmbAudioFormat.setEnabled(true);
+                audioFormat = cmbAudioFormat.getSelectedItem().toString();
                 isVideoDownloadSelected = false;
             }
         });
@@ -115,6 +117,7 @@ public class FormVideoDownloader {
                             getOutputFromCommand(process);
                         }
                     }
+
                 }
 
                 if(!isVideoDownloadSelected)
@@ -136,8 +139,9 @@ public class FormVideoDownloader {
                 }
 
                 new Thread(new CMDRunnable(commandStringBuilder.toString())).start();
-
                 System.out.println("Ran (" + commandStringBuilder.toString() + ")" );
+                commandStringBuilder.delete(startingCommand.length(), commandStringBuilder.length());
+                System.out.println("After StringBuilder reset (" + commandStringBuilder.toString() + ")" );
             }
         });
     }
@@ -234,7 +238,7 @@ public class FormVideoDownloader {
 
     public void load()
     {
-        JFrame frame = new JFrame( "Login Form" );
+        JFrame frame = new JFrame( "Video Downloader" );
         frame.setContentPane( new FormVideoDownloader().panelMain );
         frame.setDefaultCloseOperation( WindowConstants.DISPOSE_ON_CLOSE );
         frame.pack();
@@ -243,7 +247,7 @@ public class FormVideoDownloader {
     }
 
     private void createUIComponents() {
-        String[] audioFormats = {"best", "mp3", "wav", "m4a"};
+        String[] audioFormats = {"mp3", "wav", "m4a"};
         String[] downloadTypes = {"Video", "Audio"};
 
         cmbAudioFormat = new JComboBox<>(audioFormats);
