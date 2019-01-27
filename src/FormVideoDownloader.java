@@ -159,6 +159,11 @@ public class FormVideoDownloader {
         return matcher.find();
     }
 
+    /**
+     * Returns string value representing the download progress
+     * @param str String to search for download percentage e.g "[download] 34.9% ..."
+     * @return
+     */
     private String findDownloadProgress(String str)
     {
         final String REGEX_PATTERN_PASS_1 = "^(\\[download])\\s+(\\d+(\\.)?\\d%)";
@@ -188,7 +193,6 @@ public class FormVideoDownloader {
         {
             return "No Match here too";
         }
-
     }
 
     /**
