@@ -1,5 +1,6 @@
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.core.ZipFile;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,6 +22,7 @@ public class Main
         StringBuilder programDownloadDir = new StringBuilder();
 
         String ffmpegZipFileName = "ffmpegZipDownload.zip";
+        String ffMPEGExtractionFolderName = "ffmpegZipExtracted";
         ffmpegZipURL = "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20190126-d8ebfd1-win64-static.zip";
         String[] splitFFMPEG = ffmpegZipURL.split("/");
         String extractedFFMpegFileName = splitFFMPEG[6]; // ffmpeg-20190126-d8ebfd1-win64-static.zip
@@ -32,7 +34,7 @@ public class Main
                 .append(System.getProperty("file.separator")
                 );
         ffmpegBinLocation = programDownloadDir.toString()
-                + "ffmpegZipExtracted"
+                + ffMPEGExtractionFolderName
                 + System.getProperty("file.separator")
                 + splitExtractedFFMpegFileName[0]
                 + System.getProperty("file.separator")
@@ -41,10 +43,18 @@ public class Main
 
         ffmpegZipFile = new File(programDownloadDir.toString() + ffmpegZipFileName);
 
-        createDirectory(programDownloadDir.toString());
-        createDirectory(programDownloadDir.toString() + "ffmpegZipExtracted");
-        downloadFFMpeg(ffmpegZipURL, ffmpegZipFile);
-        unzipFFMpeg(ffmpegZipFile, programDownloadDir.toString() + "ffmpegZipExtracted");
+        if (!new File(programDownloadDir.toString() + ffMPEGExtractionFolderName).exists())
+        {
+            createDirectory(programDownloadDir.toString());
+            downloadFFMpeg(ffmpegZipURL, ffmpegZipFile);
+            unzipFFMpeg(ffmpegZipFile, programDownloadDir.toString() + ffMPEGExtractionFolderName);
+        }
+        else
+        {
+            System.out.println("FFMpeg already downloaded and extracted");
+        }
+
+
         String commandSetFFMpegWindowsPath = "SETX /M PATH %PATH%;" + ffmpegBinLocation;
 //        addFFMpegToWindowsPath(commandSetFFMpegWindowsPath);
 
@@ -54,7 +64,7 @@ public class Main
 //        {
 //            // Install stuff
 //        }
-        new FormVideoDownloader().load();
+//        new FormVideoDownloader().load();
     }
 
     private static void createDirectory(String location)
@@ -117,6 +127,8 @@ public class Main
     {
         if (!new File(extractionDestination).exists())
         {
+            createDirectory(extractionDestination);
+
             // Unzip the file
             try
             {
@@ -124,9 +136,11 @@ public class Main
                 ZipFile zipFile = new ZipFile(zipSource);
                 zipFile.extractAll(extractionDestination);
                 System.out.println("FFMpeg unzip complete");
+                FileUtils.forceDelete(zipSource);
+                System.out.println("\"" + zipSource + "\" has now been deleted to save space");
 
             }
-            catch (ZipException e)
+            catch (IOException | ZipException e)
             {
                 e.printStackTrace();
             }
