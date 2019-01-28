@@ -43,6 +43,7 @@ public class Main
 
         ffmpegZipFile = new File(programDownloadDir.toString() + ffmpegZipFileName);
 
+        // If ffmpeg extraction destination folder does not exist
         if (!new File(programDownloadDir.toString() + ffMPEGExtractionFolderName).exists())
         {
             createDirectory(programDownloadDir.toString());
