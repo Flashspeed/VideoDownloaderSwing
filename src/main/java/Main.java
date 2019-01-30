@@ -65,7 +65,7 @@ public class Main
 //        {
 //            // Install stuff
 //        }
-//        new FormVideoDownloader().load();
+        new FormVideoDownloader().load();
     }
 
     private static void createDirectory(String location)

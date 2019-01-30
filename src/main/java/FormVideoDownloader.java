@@ -122,14 +122,15 @@ public class FormVideoDownloader {
 
                 if(!isVideoDownloadSelected)
                 {
-                    commandStringBuilder.append("-x ");
-                    commandStringBuilder.append("--audio-format ").append(audioFormat).append(" ");
+                    commandStringBuilder.append("-x ")
+                    .append("--audio-format ").append(audioFormat).append(" ");
                 }
 
                 if(!saveDirectory.isEmpty())
                 {
-                    commandStringBuilder.append("-o \"").append(saveDirectory).append("\" ");
-                    commandStringBuilder.append("--ignore-config ");
+                    commandStringBuilder.append("-o \"").append(saveDirectory).append("\" ")
+                    .append("--ignore-config ")
+                    .append("-f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' ");
                 }
 
                 // Final value in the command should be the url
